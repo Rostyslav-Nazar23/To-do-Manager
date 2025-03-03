@@ -4,12 +4,18 @@ import android.content.Context
 import androidx.room.Room
 import com.rnazarapps.to_domanager.feature_todo.data.local.TodoDao
 import com.rnazarapps.to_domanager.feature_todo.data.local.TodoDatabase
+import com.rnazarapps.to_domanager.feature_todo.data.remote.TodoApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.create
 import javax.inject.Singleton
+
+const val fbUrl = "https://todo-manager-2649b-default-rtdb.europe-west1.firebasedatabase.app/"
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -30,5 +36,21 @@ object TodoModule {
             klass = TodoDatabase::class.java,
             name = "todo_database"
         ).fallbackToDestructiveMigration().build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRetrofit(): Retrofit {
+        return Retrofit.Builder()
+            .addConverterFactory(
+                GsonConverterFactory.create()
+            )
+            .baseUrl(fbUrl)
+            .build()
+    }
+
+    @Provides
+    fun provideRetrofitApi(retrofit: Retrofit): TodoApi {
+        return retrofit.create(TodoApi::class.java)
     }
 }
