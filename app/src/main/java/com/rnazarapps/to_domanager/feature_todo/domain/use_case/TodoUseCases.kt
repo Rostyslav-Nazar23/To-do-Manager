@@ -41,12 +41,13 @@ class TodoUseCases @Inject constructor(
 
     suspend fun getAllTodoItems(
         todoItemOrder: TodoItemOrder = TodoItemOrder.Time(SortingDirection.Down, true)
-    ): TodoUseCaseResult {
+    ): Answer<List<TodoItem>> {
         var todoItemsList = repo.getAllTodoItemsFromLocal()
 
         if (todoItemsList.isEmpty()) {
             todoItemsList = repo.getAllTodoItems()
         }
+        // todo move to repo
 
         val filteredTodoItems = if (todoItemOrder.showCompleted) {
             todoItemsList
@@ -54,24 +55,30 @@ class TodoUseCases @Inject constructor(
             todoItemsList.filter { !it.completed }
         }
 
-        return when(todoItemOrder.sortingDirection) {
+        return when (todoItemOrder.sortingDirection) {
             is SortingDirection.Down -> {
-                when(todoItemOrder) {
-                    is TodoItemOrder.Title -> TodoUseCaseResult.Success(filteredTodoItems.sortedByDescending { it.title.lowercase() })
-                    is TodoItemOrder.Time -> TodoUseCaseResult.Success(filteredTodoItems.sortedByDescending { it.timestamp })
+                when (todoItemOrder) {
+                    is TodoItemOrder.Title -> Answer.Success(filteredTodoItems.sortedByDescending { it.title.lowercase() })
+                    is TodoItemOrder.Time -> Answer.Success(filteredTodoItems.sortedByDescending { it.timestamp })
                 }
             }
+
             is SortingDirection.Up -> {
-                when(todoItemOrder) {
-                    is TodoItemOrder.Title -> TodoUseCaseResult.Success(filteredTodoItems.sortedBy { it.title.lowercase() })
-                    is TodoItemOrder.Time -> TodoUseCaseResult.Success(filteredTodoItems.sortedBy { it.timestamp })
+                when (todoItemOrder) {
+                    is TodoItemOrder.Title -> Answer.Success(filteredTodoItems.sortedBy { it.title.lowercase() })
+                    is TodoItemOrder.Time -> Answer.Success(filteredTodoItems.sortedBy { it.timestamp })
                 }
             }
         }
     }
 }
 
-sealed class TodoUseCaseResult {
-    data class Success(val todoItemList: List<TodoItem>) : TodoUseCaseResult()
-    data class Fail(val message: String) : TodoUseCaseResult()
+sealed class Answer<out T> {
+    data class Success<T>(val data: T) : Answer<T>()
+    data class Fail(val exception: AnswerException) : Answer<Nothing>()
+    data object Loading : Answer<Nothing>()
+}
+
+sealed interface AnswerException {
+    data class InvalidTodoItem(val message: String): AnswerException
 }
