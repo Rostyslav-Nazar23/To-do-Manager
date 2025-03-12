@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">To-do Manager</string>
     <string name="empty_title_or_text">Both title an text should be filled.</string>
+    <string name="uncomplete">Uncomplete task</string>
+    <string name="complete">Complete task</string>
+    <string name="delete">Delete task</string>
 </resources>

@@ -12,9 +12,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
-class TodoListViewModel(
+class TodoListViewModel @Inject constructor(
     private val todoUseCases: TodoUseCases,
     @IODispatcher private val dispatcher: CoroutineDispatcher
 ) : ViewModel() {
