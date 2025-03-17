@@ -13,4 +13,11 @@
     <string name="down_sorting_str">Down</string>
     <string name="up_sorting_str">Up</string>
     <string name="show_completed_sorting_str">Completed</string>
+    <string name="sort_menu_title">Sort by</string>
+    <string name="add_todoitem_content_description">Add todo item</string>
+    <string name="sort_menu_content_description">Sorting menu</string>
+    <string name="loading_content_description">Loading</string>
+    <string name="invalid_todo_item_exception_text">Both text and title should be filled</string>
+    <string name="delete_message">Item successfully deleted</string>
+    <string name="undo">Undo</string>
 </resources>

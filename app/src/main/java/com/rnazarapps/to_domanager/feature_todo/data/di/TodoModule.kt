@@ -5,11 +5,14 @@ import androidx.room.Room
 import com.rnazarapps.to_domanager.feature_todo.data.local.TodoDao
 import com.rnazarapps.to_domanager.feature_todo.data.local.TodoDatabase
 import com.rnazarapps.to_domanager.feature_todo.data.remote.TodoApi
+import com.rnazarapps.to_domanager.feature_todo.data.repo.TodoListRepoImpl
+import com.rnazarapps.to_domanager.feature_todo.domain.repo.TodoListRepo
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -51,5 +54,15 @@ object TodoModule {
     @Provides
     fun provideRetrofitApi(retrofit: Retrofit): TodoApi {
         return retrofit.create(TodoApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTodoRepo(
+        database: TodoDatabase,
+        api: TodoApi,
+        @IODispatcher dispatcher: CoroutineDispatcher
+    ): TodoListRepo {
+        return TodoListRepoImpl(database.dao, api, dispatcher)
     }
 }

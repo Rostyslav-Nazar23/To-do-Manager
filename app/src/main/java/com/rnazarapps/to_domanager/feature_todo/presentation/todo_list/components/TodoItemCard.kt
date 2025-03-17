@@ -66,7 +66,7 @@ fun TodoItemCard(
             Text(
                 modifier = Modifier
                     .weight(0.8f)
-                    .semantics { contentDescription = titleContentDescription },
+                    .semantics { this.contentDescription = titleContentDescription },
                 textAlign = TextAlign.Center,
                 text = todoItem.title,
                 color = contentColorFor(getCardTitleContainerColor(todoItem.completed)),
@@ -93,7 +93,7 @@ fun TodoItemCard(
             Text(
                 modifier = Modifier
                     .weight(1f)
-                    .semantics { contentDescription = textContentDescription },
+                    .semantics { this.contentDescription = textContentDescription },
                 textAlign = TextAlign.Start,
                 text = todoItem.text,
                 style = MaterialTheme.typography.bodyLarge,
