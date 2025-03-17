@@ -4,4 +4,13 @@
     <string name="uncomplete">Uncomplete task</string>
     <string name="complete">Complete task</string>
     <string name="delete">Delete task</string>
+    <string name="todo_title_content_description">Todo item Title</string>
+    <string name="todo_text_content_description">Todo item Description</string>
+    <string name="sort_selcted_content_description">Selected</string>
+    <string name="title_sorting_str">Title</string>
+    <string name="time_sorting_str">Time</string>
+    <string name="unspecified">Unspecified</string>
+    <string name="down_sorting_str">Down</string>
+    <string name="up_sorting_str">Up</string>
+    <string name="show_completed_sorting_str">Completed</string>
 </resources>

@@ -3,9 +3,7 @@ package com.rnazarapps.to_domanager.feature_todo.presentation.todo_list.componen
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -15,12 +13,16 @@ import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.rnazarapps.to_domanager.R
 import com.rnazarapps.to_domanager.core.presentation.components.CompleteButton
 import com.rnazarapps.to_domanager.core.presentation.components.DeleteButton
 import com.rnazarapps.to_domanager.core.presentation.components.getCardContainerColor
@@ -37,9 +39,11 @@ fun TodoItemCard(
     onCompleteClick: () -> Unit,
     onCardClick: () -> Unit
 ) {
+    val titleContentDescription = stringResource(R.string.todo_title_content_description)
+    val textContentDescription = stringResource(R.string.todo_text_content_description)
     Card(
         modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.small,
+        shape = MaterialTheme.shapes.large,
         onClick = onCardClick,
         colors = CardDefaults.cardColors(containerColor = getCardContainerColor(todoItem.completed))
     ) {
@@ -48,7 +52,7 @@ fun TodoItemCard(
                 .fillMaxWidth()
                 .background(
                     color = getCardTitleContainerColor(todoItem.completed),
-                    shape = MaterialTheme.shapes.small
+                    shape = MaterialTheme.shapes.large
                 )
                 .padding(horizontal = 8.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
@@ -60,7 +64,9 @@ fun TodoItemCard(
                 color = contentColorFor(getCardTitleContainerColor(todoItem.completed))
             )
             Text(
-                modifier = Modifier.weight(0.8f),
+                modifier = Modifier
+                    .weight(0.8f)
+                    .semantics { contentDescription = titleContentDescription },
                 textAlign = TextAlign.Center,
                 text = todoItem.title,
                 color = contentColorFor(getCardTitleContainerColor(todoItem.completed)),
@@ -69,7 +75,6 @@ fun TodoItemCard(
                 fontWeight = FontWeight.Bold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
-
             )
             CompleteButton(
                 modifier = Modifier.weight(0.1f),
@@ -78,16 +83,17 @@ fun TodoItemCard(
                 color = getCompleteButtonColor(completed = todoItem.completed)
             )
         }
-        Spacer(Modifier.height(12.dp))
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 8.dp),
+                .padding(horizontal = 8.dp, vertical = 12.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .weight(1f)
+                    .semantics { contentDescription = textContentDescription },
                 textAlign = TextAlign.Start,
                 text = todoItem.text,
                 style = MaterialTheme.typography.bodyLarge,
@@ -99,7 +105,6 @@ fun TodoItemCard(
 
             )
         }
-        Spacer(Modifier.height(12.dp))
     }
 }
 
@@ -117,9 +122,9 @@ fun TodoItemCardCompletedPreview(modifier: Modifier = Modifier) {
                 completed = true,
                 id = 0
             ),
-            onDeleteClick = {  },
-            onCompleteClick = {  },
-            onCardClick = {  }
+            onDeleteClick = { },
+            onCompleteClick = { },
+            onCardClick = { }
         )
     }
 }
@@ -138,9 +143,9 @@ fun TodoItemCardUncompletedPreview(modifier: Modifier = Modifier) {
                 completed = false,
                 id = 0
             ),
-            onDeleteClick = {  },
-            onCompleteClick = {  },
-            onCardClick = {  }
+            onDeleteClick = { },
+            onCompleteClick = { },
+            onCardClick = { }
         )
     }
 }

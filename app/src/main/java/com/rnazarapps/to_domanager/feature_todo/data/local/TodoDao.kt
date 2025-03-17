@@ -10,13 +10,13 @@ import com.rnazarapps.to_domanager.feature_todo.data.local.dto.LocalTodoItem
 @Dao
 interface TodoDao {
     @Query("SELECT * FROM todo_table")
-    fun getAllTodoItems(): List<LocalTodoItem>
+    suspend fun getAllTodoItems(): List<LocalTodoItem>
 
     @Query("SELECT * FROM todo_table WHERE id = :id")
     suspend fun getLocalTodoItemById(id: Int): LocalTodoItem?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun addListOfLocalTodoItems(todoItems: List<LocalTodoItem>)
+    suspend fun addLocalTodoItems(todoItems: List<LocalTodoItem>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addLocalTodoItem(todoItem: LocalTodoItem): Long

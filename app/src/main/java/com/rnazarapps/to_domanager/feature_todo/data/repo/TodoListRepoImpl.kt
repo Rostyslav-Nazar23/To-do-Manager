@@ -23,15 +23,15 @@ class TodoListRepoImpl(
     @IODispatcher private val coroutineDispatcher: CoroutineDispatcher
 ) : TodoListRepo {
     override suspend fun getAllTodoItems(): List<TodoItem> {
-        getAllTodoItemsFromRemote()
-        return dao.getAllTodoItems().toTodoItemListFromLocal()
+        var todoItems = dao.getAllTodoItems()
+        if (todoItems.isEmpty()) {
+            getAllTodoItemsFromRemote()
+            todoItems = dao.getAllTodoItems()
+        }
+        return todoItems.toTodoItemListFromLocal()
     }
 
-    override suspend fun getAllTodoItemsFromLocal(): List<TodoItem> {
-        return dao.getAllTodoItems().toTodoItemListFromLocal()
-    }
-
-    override suspend fun getAllTodoItemsFromRemote() {
+    private suspend fun getAllTodoItemsFromRemote() {
         return withContext(coroutineDispatcher) {
             try {
                 refreshLocal()
@@ -52,11 +52,10 @@ class TodoListRepoImpl(
     }
 
     private suspend fun refreshLocal() {
-        val remoteTodoItems = api.getAllTodoItems()
-        dao.addListOfLocalTodoItems(remoteTodoItems.toLocalItemListFromRemote())
+        dao.addLocalTodoItems(api.getAllTodoItems().toLocalItemListFromRemote())
     }
 
-    private fun isLocalEmpty(): Boolean {
+    private suspend fun isLocalEmpty(): Boolean {
         var isEmpty = true
         if (dao.getAllTodoItems().isNotEmpty()) isEmpty = false
         return isEmpty
@@ -95,5 +94,4 @@ class TodoListRepoImpl(
             }
         }
     }
-
 }

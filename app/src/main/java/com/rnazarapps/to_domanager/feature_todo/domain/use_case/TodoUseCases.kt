@@ -1,11 +1,11 @@
 package com.rnazarapps.to_domanager.feature_todo.domain.use_case
 
-import com.rnazarapps.to_domanager.core.utils.TodoUseCaseStrings
 import com.rnazarapps.to_domanager.feature_todo.domain.model.TodoItem
 import com.rnazarapps.to_domanager.feature_todo.domain.repo.TodoListRepo
 import com.rnazarapps.to_domanager.feature_todo.domain.utils.InvalidTodoItemException
 import com.rnazarapps.to_domanager.feature_todo.domain.utils.SortingDirection
-import com.rnazarapps.to_domanager.feature_todo.domain.utils.TodoItemOrder
+import com.rnazarapps.to_domanager.feature_todo.domain.utils.SortingType
+import com.rnazarapps.to_domanager.feature_todo.domain.utils.TodoItemSorter
 import javax.inject.Inject
 
 class TodoUseCases @Inject constructor(
@@ -13,7 +13,7 @@ class TodoUseCases @Inject constructor(
 ) {
     suspend fun addTodoItem(todoItem: TodoItem) {
         if (todoItem.title.isBlank() || todoItem.text.isBlank()) {
-            throw InvalidTodoItemException(TodoUseCaseStrings.EMPTY_TITLE_OR_TEXT) // todo change to string resources
+            throw InvalidTodoItemException("Both title an text should be filled.")
         } else {
             repo.addTodoItem(todoItem)
         }
@@ -21,7 +21,7 @@ class TodoUseCases @Inject constructor(
 
     suspend fun updateTodoItem(todoItem: TodoItem) {
         if (todoItem.title.isBlank() || todoItem.text.isBlank()) {
-            throw InvalidTodoItemException(TodoUseCaseStrings.EMPTY_TITLE_OR_TEXT) // todo change to string resources
+            throw InvalidTodoItemException("Both title an text should be filled.")
         } else {
             repo.updateTodoItem(todoItem)
         }
@@ -40,33 +40,49 @@ class TodoUseCases @Inject constructor(
     }
 
     suspend fun getAllTodoItems(
-        todoItemOrder: TodoItemOrder = TodoItemOrder.Time(SortingDirection.Down, true)
+        todoItemSorter: TodoItemSorter = TodoItemSorter(
+            sortingType = SortingType.Time,
+            sortingDirection = SortingDirection.Down,
+            showCompleted = true
+        )
     ): Answer<List<TodoItem>> {
-        var todoItemsList = repo.getAllTodoItemsFromLocal()
+        val todoItemsList = repo.getAllTodoItems()
 
-        if (todoItemsList.isEmpty()) {
-            todoItemsList = repo.getAllTodoItems()
-        }
-        // todo move to repo
+        return Answer.Success(
+            sortTodoItems(
+                todoItemsList = todoItemsList,
+                todoItemSorter = todoItemSorter
+            )
+        )
+    }
 
-        val filteredTodoItems = if (todoItemOrder.showCompleted) {
+    fun sortTodoItems(
+        todoItemsList: List<TodoItem>,
+        todoItemSorter: TodoItemSorter = TodoItemSorter(
+            sortingType = SortingType.Time,
+            sortingDirection = SortingDirection.Down,
+            showCompleted = true
+        )
+    ): List<TodoItem> {
+        val filteredTodoItems = if (todoItemSorter.showCompleted) {
             todoItemsList
         } else {
             todoItemsList.filter { !it.completed }
         }
 
-        return when (todoItemOrder.sortingDirection) {
-            is SortingDirection.Down -> {
-                when (todoItemOrder) {
-                    is TodoItemOrder.Title -> Answer.Success(filteredTodoItems.sortedByDescending { it.title.lowercase() })
-                    is TodoItemOrder.Time -> Answer.Success(filteredTodoItems.sortedByDescending { it.timestamp })
+
+        return when (todoItemSorter.sortingDirection) {
+            SortingDirection.Down -> {
+                when (todoItemSorter.sortingType) {
+                    SortingType.Title -> filteredTodoItems.sortedByDescending { it.title.lowercase() }
+                    SortingType.Time -> filteredTodoItems.sortedByDescending { it.timestamp }
                 }
             }
 
-            is SortingDirection.Up -> {
-                when (todoItemOrder) {
-                    is TodoItemOrder.Title -> Answer.Success(filteredTodoItems.sortedBy { it.title.lowercase() })
-                    is TodoItemOrder.Time -> Answer.Success(filteredTodoItems.sortedBy { it.timestamp })
+            SortingDirection.Up -> {
+                when (todoItemSorter.sortingType) {
+                    SortingType.Title -> filteredTodoItems.sortedBy { it.title.lowercase() }
+                    SortingType.Time -> filteredTodoItems.sortedBy { it.timestamp }
                 }
             }
         }
@@ -80,5 +96,5 @@ sealed class Answer<out T> {
 }
 
 sealed interface AnswerException {
-    data class InvalidTodoItem(val message: String): AnswerException
+    data class InvalidTodoItem(val message: String) : AnswerException
 }

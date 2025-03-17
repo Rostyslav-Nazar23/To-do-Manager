@@ -29,7 +29,7 @@ class TodoListViewModel @Inject constructor(
         getTodoItemsJob?.cancel()
         getTodoItemsJob = viewModelScope.launch(dispatcher) {
             _state.value = _state.value.copy(
-                todoList = todoUseCases.getAllTodoItems(_state.value.todoItemOrder)
+                todoList = todoUseCases.getAllTodoItems(_state.value.todoItemSorter)
             )
         }
     }
@@ -47,14 +47,14 @@ class TodoListViewModel @Inject constructor(
             is TodoListEvent.Sort -> {
                 viewModelScope.launch(dispatcher) {
                     val stateOrderMatchesEventOrder =
-                        _state.value.todoItemOrder::class == event.todoItemOrder &&
-                                _state.value.todoItemOrder.showCompleted == event.todoItemOrder.showCompleted &&
-                                _state.value.todoItemOrder.sortingDirection == event.todoItemOrder.sortingDirection
+                        _state.value.todoItemSorter == event.todoItemSorter &&
+                                _state.value.todoItemSorter.showCompleted == event.todoItemSorter.showCompleted &&
+                                _state.value.todoItemSorter.sortingDirection == event.todoItemSorter.sortingDirection
                     if (stateOrderMatchesEventOrder) {
                         return@launch
                     }
                     _state.value = _state.value.copy(
-                        todoItemOrder = event.todoItemOrder
+                        todoItemSorter = event.todoItemSorter
                     )
                     getTodoItems()
                 }
