@@ -12,5 +12,5 @@ data class RemoteTodoItem(
     @SerializedName("Completed")
     val completed: Boolean,
     @SerializedName("ID")
-    val id: Int
+    val id: Int?
 )

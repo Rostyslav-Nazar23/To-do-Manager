@@ -8,4 +8,5 @@ sealed class TodoListEvent {
     data class Delete(val todoItem: TodoItem): TodoListEvent()
     data class SwitchCompleted(val todoItem: TodoItem): TodoListEvent()
     data object UndoDelete: TodoListEvent()
+    // todo add refresh event
 }

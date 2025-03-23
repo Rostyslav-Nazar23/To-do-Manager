@@ -10,7 +10,7 @@ fun TodoItem.toRemoteTodoItem(): RemoteTodoItem {
         text = text,
         timestamp = timestamp,
         completed = completed,
-        id = id
+        id = id!!
     )
 }
 
@@ -30,7 +30,7 @@ fun TodoItem.toLocalTodoItem(): LocalTodoItem {
         text = text,
         timestamp = timestamp,
         completed = completed,
-        id = id
+        id = id!!
     )
 }
 
@@ -83,7 +83,7 @@ fun List<TodoItem>.toLocalTodoItemList(): List<LocalTodoItem> {
             text = todo.text,
             timestamp = todo.timestamp,
             completed = todo.completed,
-            id = todo.id
+            id = todo.id!!
         )
     }
 }
@@ -107,7 +107,7 @@ fun List<TodoItem>.toRemoteTodoItemList(): List<RemoteTodoItem> {
             text = todo.text,
             timestamp = todo.timestamp,
             completed = todo.completed,
-            id = todo.id
+            id = todo.id!!
         )
     }
 }

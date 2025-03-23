@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationDrawerItem
@@ -33,6 +34,7 @@ fun SortingDrawerOptions(
             onOrderChange = onOrderChange
         )
     }
+    HorizontalDivider()
     SortingDirection.entries.forEach {
         SortingDirectionDrawerOption(
             sortingDirection = it,
@@ -40,6 +42,7 @@ fun SortingDrawerOptions(
             onOrderChange = onOrderChange
         )
     }
+    HorizontalDivider()
     ShowCompletedDrawerOption(
         todoItemSorter = todoItemSorter,
         onOrderChange = onOrderChange

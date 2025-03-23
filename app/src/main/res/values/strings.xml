@@ -20,4 +20,10 @@
     <string name="invalid_todo_item_exception_text">Both text and title should be filled</string>
     <string name="delete_message">Item successfully deleted</string>
     <string name="undo">Undo</string>
+    <string name="no_todo_items_yet">No todo items added.\nPress \"+\" to add new item</string>
+    <string name="todo_item_not_found">Todo item was not found in database</string>
+    <string name="cant_connect_to_remote_database">Can\'t connect to remote database. Check your Internet connection or try again later</string>
+    <string name="no_internet_or_remote_dont_work">Internet connection is absent or remote database has issues</string>
+    <string name="database_is_being_used">Database is being used by other process. Try again later</string>
+    <string name="database_locked">Couldn\'t access database. Check appliaction\'s permissions</string>
 </resources>

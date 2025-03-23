@@ -5,5 +5,5 @@ data class TodoItem(
     val text: String,
     val timestamp: Long,
     val completed: Boolean,
-    val id: Int
+    val id: Int?
 )

@@ -12,7 +12,7 @@ import retrofit2.http.Url
 
 interface TodoApi {
     @GET("todo.json")
-    suspend fun getAllTodoItems(): List<RemoteTodoItem>
+    suspend fun getAllTodoItems(): List<RemoteTodoItem?>
 
     @GET("todo.json?orderBy=\"ID\"")
     suspend fun getRemoteTodoItemById(@Query("equalTo") id: Int): Map<String, RemoteTodoItem>

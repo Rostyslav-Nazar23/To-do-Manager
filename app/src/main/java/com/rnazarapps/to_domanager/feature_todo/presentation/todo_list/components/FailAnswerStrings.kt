@@ -4,13 +4,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
 import com.rnazarapps.to_domanager.R
-import com.rnazarapps.to_domanager.feature_todo.domain.use_case.Answer
-import com.rnazarapps.to_domanager.feature_todo.domain.use_case.AnswerException
+import com.rnazarapps.to_domanager.feature_todo.data.repo.RepoException
 
 @Composable
 @ReadOnlyComposable
-fun getFailText(answer: Answer.Fail): String {
-    return when(answer.exception) {
-        is AnswerException.InvalidTodoItem -> stringResource(R.string.invalid_todo_item_exception_text)
+fun getRepoFailText(repoException: RepoException): String {
+    return when(repoException) {
+        is RepoException.NullItemResponse -> stringResource(R.string.todo_item_not_found)
+        is RepoException.ConnectionError -> stringResource(R.string.no_internet_or_remote_dont_work)
+        is RepoException.DatabaseLocked -> stringResource(R.string.database_is_being_used)
+        is RepoException.DiskIOException -> stringResource(R.string.database_locked)
+        is RepoException.InternetError -> stringResource(R.string.cant_connect_to_remote_database)
     }
 }

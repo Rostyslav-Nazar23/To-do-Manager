@@ -19,8 +19,8 @@ fun getCompleteButtonColor(completed: Boolean): Color {
 @ReadOnlyComposable
 fun getCardContainerColor(completed: Boolean): Color {
     return when(completed) {
-        true -> MaterialTheme.colorScheme.surfaceDim
-        false -> MaterialTheme.colorScheme.surface
+        true -> MaterialTheme.colorScheme.surfaceContainerHighest
+        false -> MaterialTheme.colorScheme.surfaceContainer
     }
 }
 

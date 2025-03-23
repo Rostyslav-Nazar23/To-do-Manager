@@ -10,5 +10,5 @@ data class LocalTodoItem(
     val timestamp: Long,
     val completed: Boolean,
     @PrimaryKey(autoGenerate = true)
-    val id: Int
+    val id: Int?
 )

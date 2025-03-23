@@ -67,7 +67,7 @@ class TodoListViewModel @Inject constructor(
                 }
             }
 
-            TodoListEvent.UndoDelete -> {
+            is TodoListEvent.UndoDelete -> {
                 viewModelScope.launch(dispatcher) {
                     todoUseCases.addTodoItem(undoTodoItem ?: return@launch)
                     undoTodoItem = null
